@@ -5,7 +5,7 @@ import copy
 import heapq
 from typing import Generic, TypeVar, Iterable, Callable, Iterator
 
-from comparablevalue import ComparableValue
+from .comparablevalue import ComparableValue
 
 T = TypeVar('T')
 C = TypeVar('C', bound=ComparableValue)

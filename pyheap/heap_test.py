@@ -1,7 +1,7 @@
 import random
 import unittest
 
-from heap import heap
+from .heap import heap
 
 
 class MyTestCase(unittest.TestCase):
