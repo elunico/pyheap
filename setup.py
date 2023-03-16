@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="pyheap-elunico",
-    version="0.4.0",
+    version="0.5.0",
     author="Thomas Povinelli",
     author_email="tompov227@gmail.com",
     description="A wrapper class around Python's built-in heapq module",

@@ -85,6 +85,17 @@ class MyTestCase(unittest.TestCase):
 
         all(self.assertLessEqual(h.pop(), h.smallest) for (i, elt) in enumerate(h.backing))
 
+    def test_str_nothrow(self):
+        h = heap()
+        h.push([5, 3, 5, 7, 1, 2, 3, 6, 1])
+        str(h)
+        h.pop()
+        h.pop()
+        h.pop()
+        h.pop()
+        h.pop()
+        str(h)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -176,7 +176,7 @@ class heap(Generic[T]):
         return '[{}]'.format(', '.join(str(self.map[i]) for i in self.backing))
 
     def __repr__(self) -> str:
-        return 'Heap({}{})'.format(', '.join(str(self.map[i]) for i in self.backing),
+        return 'Heap({}{})'.format(', '.join(str(self.map[i][0]) for i in self.backing if len(self.map[i]) > 0),
                                    ", key={}".format(self.key) if self.key != identity else '')
 
     def __hash__(self) -> int:
