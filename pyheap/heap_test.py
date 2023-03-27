@@ -96,6 +96,23 @@ class MyTestCase(unittest.TestCase):
         h.pop()
         str(h)
 
+    def test_equals(self):
+        h = heap()
+        h.push([1, 2, 3, 4])
+        g = heap()
+        g.push([4, 3, 2, 1])
+        self.assertEqual(h, g)
+
+    def test_equals_smaller(self):
+        h = heap()
+        h.push(1)
+        h.push(2)
+        g = heap()
+        g.push(1)
+        g.push(2)
+        g.push(3)
+        self.assertNotEqual(h, g)
+
 
 if __name__ == '__main__':
     unittest.main()

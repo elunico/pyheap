@@ -11,15 +11,23 @@ T = TypeVar('T')
 C = TypeVar('C', bound=ComparableValue)
 
 
-def identity(arg):
+def identity(arg: T) -> T:
     return arg
 
 
-def unlink(heap, key) -> object:
+def unlink(heap: heap, key: C) -> object:
     item = heap.map[key].pop()
     if len(heap.map[key]) == 0:
         del heap.map[key]
     return item
+
+
+def parent_index(index: int) -> int:
+    return (index - 1) // 2
+
+
+def child_indices(parent: int) -> tuple[int, int]:
+    return (parent * 2 + 1), (parent * 2 + 2)
 
 
 class heap(Generic[T]):
@@ -29,21 +37,21 @@ class heap(Generic[T]):
     Within a method call the heap invariant may not hold
     """
 
-    def __init__(self, iterable: Iterable[C] | None = None, key: Callable[[T], C] | None = None):
+    def __init__(self, iterable: Iterable[T] | None = None, key: Callable[[T], C] | None = None):
         """
         Creates a heap with the given iterable. iterable is heapified before the end of the __init__ call.
         If iterable is None, an empty heap is created. The element type of this collection must adapt the
         ComparableValue protocol. See the ComparableValue protocol in comparablevalue.py for more
 
-        key determines how the elements of the heap are ordered. It should take a single item of the type 
+        key determines how the elements of the heap are ordered. It should take a single item of the type
         of the elements of the heap and return anything that is comparable.
-        :param: iterable - the collection to heapify and store or None 
-        :param: key - a function that takes elements of the heap and produces the comparable value on which they are organized 
+        :param: iterable - the collection to heapify and store or None
+        :param: key - a function that takes elements of the heap and produces the comparable value on which they are organized
         """
         self.key = key if key is not None else identity
-        self.map = collections.defaultdict(list)
+        self.map: dict[list[T]] = collections.defaultdict(list)
         if iterable is None:
-            self.backing = []
+            self.backing: list[C] = []
         else:
             self.backing = [key(i) for i in iterable]
             for i in iterable:
@@ -51,7 +59,7 @@ class heap(Generic[T]):
             heapq.heapify(self.backing)
 
     @property
-    def smallest(self):
+    def smallest(self) -> T:
         """
         Returns the smallest element in the heap in O(1) time
         :return: the smallest element in the heap
@@ -59,7 +67,7 @@ class heap(Generic[T]):
         return self.map[self.backing[0]][0]
 
     @property
-    def top(self):
+    def top(self) -> T:
         """
         Returns the top of the heap in O(1) which is the smallest element
         :return: the top of the heap
@@ -162,7 +170,8 @@ class heap(Generic[T]):
             return False
         s1 = self.map
         s2 = o.map
-        return all(i in s1 for i in s2) and all(j in s2 for j in s1)
+        return (all(i in s1 for i in s2) and all(i in s2 for i in s1) and
+                all(s1[k] == s2v for (k, s2v) in s2.items()))
 
     def __ne__(self, o: object) -> bool:
         """
@@ -188,11 +197,3 @@ class heap(Generic[T]):
     def clear(self):
         self.backing = []
         self.map = collections.defaultdict(list)
-
-    @staticmethod
-    def parent_index(index: int) -> int:
-        return (index - 1) // 2
-
-    @staticmethod
-    def child_indices(parent: int) -> tuple[int, int]:
-        return (parent * 2), (parent * 2 + 1)
